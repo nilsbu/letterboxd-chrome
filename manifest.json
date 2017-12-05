@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+
+  "name": "Letterboxd",
+  "description": "This extension smooths letterboxd's graph and adds a few numbers",
+  "version": "1.0",
+
+  "permissions": [
+    "tabs",
+    "https://letterboxd.com/*",
+    "https://ajax.googleapis.com/"
+  ],
+    "content_scripts": [{
+        "matches": ["*://*.letterboxd.com/film/*"],
+        "js": ["ratings.js"]
+    }]
+}
