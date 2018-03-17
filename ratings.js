@@ -1,5 +1,3 @@
-const COLORS = ["#ff9933", "#66cc22", "#88ccff"];
-
 function readBins() {
     var select = document.getElementsByClassName("rating-histogram-bar");
     var bins = [];
@@ -26,7 +24,7 @@ function getHareNiemeyer(bigBins) {
     var sum = bigBins.reduce((pv, cv) => pv+cv, 0);
     var raw = bigBins.map(function(x){return x/sum*100;});
     var floors = raw.map(Math.floor);
-    
+
     var remainder = [];
     for(var i = 0; i < floors.length; i++) {
         remainder[i] = raw[i] - floors[i];
@@ -73,20 +71,22 @@ function putBigBins(bigBins){
 }
 
 function dyeBars() {
-    var select = document.getElementsByClassName("rating-histogram-bar");
+  const COLORS = ["#ff9933", "#66cc22", "#88ccff"];
 
-    id = 0;
+  var select = document.getElementsByClassName("rating-histogram-bar");
 
-    for (var i = 0; i < select.length; i++) {
-        var bar = select[i].getElementsByTagName("i")[0];
-        var style = bar.getAttribute("style");
-        
-        style += "background-color: " + COLORS[id] + ";";
-        bar.setAttribute("style", style);
+  id = 0;
 
-        if(i == 4) id++;
-        else if(i == 7) id++;
-    };
+  for (var i = 0; i < select.length; i++) {
+      var bar = select[i].getElementsByTagName("i")[0];
+      var style = bar.getAttribute("style");
+
+      style += "background-color: " + COLORS[id] + ";";
+      bar.setAttribute("style", style);
+
+      if(i == 4) id++;
+      else if(i == 7) id++;
+  };
 }
 
 function calcEqRatio(bins) {
@@ -136,7 +136,7 @@ function adjustBins(correctedBins) {
     for (var i = 0; i < bars.length; i++) {
         var style = bars[i].getAttribute("style");
         var newHeight = Math.max(maxHeight * correctedBins[i] / maxValue, 1);
-        
+
         bars[i].setAttribute("style", "height: " + newHeight + "px;");
     };
 
@@ -154,7 +154,7 @@ function putStdDev(bins) {
     var sum = bins.reduce((pv, cv) => pv+cv, 0);
 
     var stdDev = 0.0;
-    for(var i = 0; i < correctedBins.length; i++) {
+    for(var i = 0; i < bins.length; i++) {
         var div = (i+1)/2 - avg;
         stdDev += bins[i]/sum * div * div;
     }
@@ -252,15 +252,21 @@ function appendCenter(div, ab) {
     div.appendChild(span);
 }
 
-var bins = readBins();
+function main() {
+  var bins = readBins();
+  console.log(bins);
 
-var correctedBins = equalizeBins(bins, 4/3);
-adjustBins(correctedBins);
-dyeBars();
+  var correctedBins = equalizeBins(bins, 4/3);
+  adjustBins(correctedBins);
+  dyeBars();
 
-var accepted = getAccepted(correctedBins);
+  var accepted = getAccepted(correctedBins);
 
-putLevel(Math.floor(accepted[1]*10));
-putBigBins(getPercentages(accepted, 1));
-var div = putStdDev(correctedBins);
-appendCenter(div, getCenter(correctedBins, 0.75));
+  putLevel(Math.floor(accepted[1]*10));
+  putBigBins(getPercentages(accepted, 1));
+  var div = putStdDev(correctedBins);
+  appendCenter(div, getCenter(correctedBins, 0.75));
+}
+
+var headline = document.getElementsByClassName("headline-1")[0];
+headline.onclick = function() {main()};
