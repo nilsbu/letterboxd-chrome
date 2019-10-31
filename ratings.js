@@ -127,7 +127,7 @@ function getAvg(bins) {
 }
 
 function adjustBins(correctedBins) {
-    var maxHeight = 30.0;
+    var maxHeight = 44.0;
     var maxValue = Math.max.apply(Math, correctedBins);
 
     var select = document.getElementsByClassName("rating-histogram");
